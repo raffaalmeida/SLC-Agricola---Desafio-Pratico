@@ -3,6 +3,14 @@ SLC AGRÍCOLA - DESAFIO PRÁTICO
 Analista de Suprimentos com foco em IA
 ===============================================================================
 
+Desenvolvido por: Rafael Almeida
+contato:
+   - Gupy
+   Ou
+   - e-mail: rafael.ai.developer@gmail.com
+   - LinkedIn: www.linkedin.com/in/rafael-almeida-b6540624a
+
+
 Aplicação local em Python que realiza alterações na planilha de Suprimentos
 (base_cadastro_e_requisições*.xlsx), composta pelas abas BASE_CADASTRO_ITENS
 (cadastro de itens) e BASE_RCs (requisições de compra em aberto).
