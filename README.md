@@ -33,7 +33,8 @@ Passo a passo:
    1. Copie o arquivo SuprimentosSLC.exe para uma pasta no computador;
    2. Coloque na MESMA pasta a planilha base (ex.:
       base_cadastro_e_requisições_1.xlsx);
-   3. Dê um duplo clique no SuprimentosSLC.exe. Pronto.
+   3. Dê um duplo clique no SuprimentosSLC.exe. Pronto. Ele pode demorar alguns segundos na primeira abertura.
+      E use no modo maximizado, para ver todos od botoes e colunas da tabela.
 
 Como o aplicativo encontra a planilha:
 
