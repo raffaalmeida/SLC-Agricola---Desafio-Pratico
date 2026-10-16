@@ -68,6 +68,10 @@ COL_EXC_RC = 1
 COL_EXC_GRUPO = 2
 COL_EXC_DATA = 3
 
+# Recursos empacotados junto com o aplicativo (ícone da janela e logotipo)
+CAMINHO_ICONE = os.path.join("assets", "slc.ico")
+CAMINHO_LOGO = os.path.join("assets", "slc_brand_name.png")
+
 
 # ============================== Funções auxiliares ======================
 
@@ -123,6 +127,18 @@ def pasta_do_app():
     if getattr(sys, "frozen", False):  # quando empacotado com PyInstaller
         return os.path.dirname(os.path.abspath(sys.executable))
     return os.path.dirname(os.path.abspath(__file__))
+
+
+def caminho_recurso(relativo):
+    """
+    Caminho absoluto de um recurso empacotado (pasta assets).
+    Funciona rodando pelo Python e também como executável do PyInstaller:
+    no modo onefile os recursos são extraídos para sys._MEIPASS.
+    """
+    base = getattr(sys, "_MEIPASS", None)
+    if base is None:
+        base = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base, relativo)
 
 
 def localizar_arquivo_base(pasta):
@@ -670,11 +686,34 @@ class App(ttk.Window):
         self.title("SLC Agrícola · Suprimentos — Redirecionamento de RCs e Cadastro de Itens")
         self.geometry("1240x740")
         self.minsize(1060, 620)
+        self._aplicar_icone()
         self.service = None
         self._rcs_validas = set()
         self._montar_estilos()
         self._montar_interface()
         self._carregar_arquivo_inicial()
+
+    # ------------------------------ ícone --------------------------------
+
+    def _aplicar_icone(self):
+        """
+        Aplica o ícone da SLC (assets/slc.ico) na janela: barra de título,
+        Alt+Tab e barra de tarefas.
+        """
+        icone = caminho_recurso(CAMINHO_ICONE)
+        if not os.path.isfile(icone):
+            return
+        try:
+            # No Windows, iconbitmap aplica o .ico na janela e na barra de tarefas.
+            self.iconbitmap(icone)
+        except tk.TclError:
+            # Fallback: converte o .ico em PhotoImage (via Pillow) e usa iconphoto.
+            try:
+                from PIL import Image, ImageTk
+                self._icone_img = ImageTk.PhotoImage(Image.open(icone))
+                self.iconphoto(True, self._icone_img)
+            except Exception:
+                pass  # segue com o ícone padrão, sem interromper o aplicativo
 
     # ------------------------------ estilos ------------------------------
 
@@ -743,7 +782,7 @@ class App(ttk.Window):
         bloco.pack(side="left", padx=18, pady=10)
         
         from PIL import Image, ImageTk
-        imagem_original = Image.open("assets/slc_brand_name.png")
+        imagem_original = Image.open(caminho_recurso(CAMINHO_LOGO))
         
         # 2. Redimensionar a imagem para caber no cabeçalho (ajuste os valores 150x40 conforme achar melhor)
         imagem_redimensionada = imagem_original.resize((150, 17), Image.Resampling.LANCZOS)

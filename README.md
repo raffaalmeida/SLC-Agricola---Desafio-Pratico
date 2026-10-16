@@ -79,8 +79,9 @@ externamente, as RCs com exceção continuam com o grupo comprador delegado. A a
 ## Requisitos
 
 - Python 3.8 ou superior;
-- Bibliotecas open source: `openpyxl` (Excel) e `ttkbootstrap` (tema moderno do
-  Tkinter). A interface usa o Tkinter, que já acompanha o Python.
+- Bibliotecas open source: `openpyxl` (Excel), `ttkbootstrap` (tema moderno do
+  Tkinter) e `Pillow` (logotipo e ícone da janela). A interface usa o Tkinter,
+  que já acompanha o Python.
 
 ```bash
 pip install -r requirements.txt
@@ -102,15 +103,40 @@ python app_suprimentos.py
 > **Dica:** feche a planilha no Microsoft Excel antes de executar operações no
 > aplicativo, caso contrário o Windows bloqueia o salvamento.
 
+## Como gerar o executável (PyInstaller)
+
+O projeto inclui o arquivo `SuprimentosSLC.spec`, já configurado para usar o
+ícone `assets/slc.ico` em tudo:
+
+- **Arquivo .exe no Windows Explorer** — ícone embutido no executável pelo PyInstaller;
+- **Janela do aplicativo** — barra de título, Alt+Tab e barra de tarefas usam o
+  mesmo `.ico`, empacotado dentro do executável (pasta `assets` via `datas`).
+
+Para gerar:
+
+```bash
+pip install pyinstaller
+pyinstaller SuprimentosSLC.spec --clean --noconfirm
+```
+
+O executável é gerado em `dist/SuprimentosSLC.exe` (versão *onefile*, sem janela
+de console). Para distribuir, basta copiá-lo para uma pasta junto com a planilha
+base (`base_cadastro_e_requisições*.xlsx`) — o aplicativo localiza a planilha
+automaticamente ao abrir.
+
+> **Observação:** por ser *onefile*, na primeira abertura o executável leva alguns
+> segundos a mais (extração temporária); nas aberturas seguintes costuma abrir
+> mais rápido. Caso prefira inicialização instantânea, gere em modo *one-dir*
+> adicionando `--onedir` em vez de *onefile*.
+
 ## Arquivos do projeto
 
 | Arquivo | Descrição |
 |---|---|
 | `app_suprimentos.py` | Código-fonte da aplicação (Tkinter + ttkbootstrap + openpyxl) |
-| `requirements.txt` | Dependências (`openpyxl`, `ttkbootstrap`) |
+| `requirements.txt` | Dependências (`openpyxl`, `ttkbootstrap`, `Pillow`) |
+| `assets/slc.ico` | Ícone da aplicação (janela e executável) |
+| `assets/slc_brand_name.png` | Logotipo exibido no cabeçalho da interface |
+| `SuprimentosSLC.spec` | Configuração do PyInstaller (gera `dist/SuprimentosSLC.exe` com o ícone) |
 | `base_cadastro_e_requisições_1.xlsx` | Planilha base (com as alterações realizadas em testes) |
 | `README.md` | Este arquivo de instruções |
-
-## Próxima etapa (fora desta versão)
-
-- Geração do **executável** com a biblioteca **PyInstaller**, conforme solicitado na entrega.

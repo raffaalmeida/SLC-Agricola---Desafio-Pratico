@@ -1,2 +1,5 @@
 .venv
 .DS_store
+build/
+__pycache__/
+*.exe
